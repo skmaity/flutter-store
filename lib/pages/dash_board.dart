@@ -1,10 +1,11 @@
 import 'package:animated_login/components/bottomnavbar.dart';
-import 'package:animated_login/components/first_tab.dart';
+import 'package:animated_login/components/navigation_controller.dart';
+import 'package:animated_login/dashboard_tabs/first_tab.dart';
 import 'package:animated_login/components/glass_box.dart';
 // import 'package:animated_login/pages/dash_board.dart';
 import 'package:animated_login/components/search_box.dart';
-import 'package:animated_login/components/secend_tab.dart';
-import 'package:animated_login/components/third_tab.dart';
+import 'package:animated_login/dashboard_tabs/secend_tab.dart';
+import 'package:animated_login/dashboard_tabs/third_tab.dart';
 
 import 'package:animated_login/pages/games_page.dart';
 import 'package:animated_login/pages/home_page.dart';
@@ -12,6 +13,9 @@ import 'package:animated_login/pages/settings_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/get_instance.dart';
+// import 'package:get/get_state_manager/get_state_manager.dart';
 
 class DashBoard extends StatefulWidget {
   const DashBoard({super.key});
@@ -20,19 +24,18 @@ class DashBoard extends StatefulWidget {
   State<DashBoard> createState() => _DashBoardState();
 }
 
-int _currentIndex = 0;
 final user = FirebaseAuth.instance.currentUser!;
-// final String? photoUrl = user.photoURL;
 List <Widget>pages =[
   const HomePage(),
   const GamesPage(),
-  const SettingsPage()
+  const SettingsPage(),
 ];
+var controller = Get.put(Navigation());
 
 class _DashBoardState extends State<DashBoard> {
   _handleIndexChange(int index) {
     setState(() {
-      _currentIndex = index;
+      controller.currentIndex = index;
     });
   }
    onSearch() {
@@ -43,7 +46,7 @@ class _DashBoardState extends State<DashBoard> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        backgroundColor: Colors.cyan,
+        // backgroundColor: Colors.cyan,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -60,7 +63,7 @@ class _DashBoardState extends State<DashBoard> {
                 child: ClipRRect(
                     clipBehavior: Clip.antiAlias,
                     borderRadius: BorderRadius.circular(30),
-                    child: Image(image: NetworkImage(user.photoURL!))),
+                    child: user.photoURL != null? Image(image: NetworkImage(user.photoURL!)): const Image(image: AssetImage('lib/assets/nodp.jpg')) ),
               ), 
               const SizedBox(width: 20,)
                 ],
@@ -71,7 +74,7 @@ class _DashBoardState extends State<DashBoard> {
         ),
         body:Column(
           children: [
-            _currentIndex !=2? const TabBar(
+            controller.currentIndex !=2? const TabBar(
               automaticIndicatorColorAdjustment: true,
               tabs:
               [
@@ -82,16 +85,16 @@ class _DashBoardState extends State<DashBoard> {
                   icon: Text('Top chart'),
                 ),
                  Tab(
-                  icon: Text('Premium'),
+                  icon: Text('Categories'),
                 ),
               ]
             ):const SizedBox(),
-            pages[_currentIndex],
+            pages[controller.currentIndex],
             Expanded(
               child: TabBarView(children: [
-                FirstTab(pageIndex: _currentIndex),
-                SecendTab(pageIndex: _currentIndex,),
-                ThirdTab(pageIndex: _currentIndex)
+                FirstTab(pageIndex: controller.currentIndex),
+                SecendTab(pageIndex: controller.currentIndex,),
+                ThirdTab(pageIndex: controller.currentIndex)
                 
               ]),
             )
@@ -101,7 +104,7 @@ class _DashBoardState extends State<DashBoard> {
         bottomNavigationBar: GlassBox(
           child: 
            MyBottomNavbar(
-                index: _currentIndex,
+                index: controller.currentIndex,
                 onTap: _handleIndexChange,
               ),
         ),

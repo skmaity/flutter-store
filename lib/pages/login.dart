@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _pop() {
+  void _pop(context) {
     Navigator.pop(context);
   }
 
@@ -58,14 +58,15 @@ class _LoginPageState extends State<LoginPage> {
         return const Center(child: CircularProgressIndicator());
       },
     );
-    //  Navigator.push(context, MaterialPageRoute(builder: (context) => const DashBoard(),));
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailcontroller.text, password: passwordcontroller.text);
-
-      _pop();
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: emailcontroller.text, password: passwordcontroller.text)
+          .then((value){
+           _pop(context);
+          });
     } on FirebaseAuthException catch (e) {
-      _pop();
+      _pop(context);
       // wrong email message
       showMessage(e.code);
     }
@@ -78,23 +79,23 @@ class _LoginPageState extends State<LoginPage> {
         return const Center(child: CircularProgressIndicator());
       },
     );
-    // try {
-    //   Authservices().signInWithGoogle();
-    //   _pop();
-
-    // } catch (e) {
-    //   print(e);
-    //   _pop();
-    // }
-
     try {
-      GoogleAuthProvider googleAuthProvider = GoogleAuthProvider();
-      auth.signInWithProvider(googleAuthProvider);
-      _pop();
-    } on FirebaseAuthException catch (e) {
-      _pop();
-      showMessage(e.code);
+      _pop(context);
+      Authservices().signInWithGoogle();
+    } catch (e) {
+     _pop(context);
+
+      showMessage(e.toString());
     }
+
+    // try {
+    //   GoogleAuthProvider googleAuthProvider = GoogleAuthProvider();
+    //   auth.signInWithProvider(googleAuthProvider);
+    //   _pop();
+    // } on FirebaseAuthException catch (e) {
+    //   _pop();
+    // showMessage(e.code);
+    // }
   }
 
   facebookSignIn() async {
@@ -105,16 +106,16 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
     try {
-      final UserCredential usercredential = await Authservices().signInWithFacebook();
-      if(context.mounted){
-        print(usercredential.user!.displayName!);
-      }
+      final UserCredential usercredential =
+          await Authservices().signInWithFacebook();
 
-      // Authservices().signInWithFacebook();
-      _pop();
+      Authservices().signInWithFacebook().then((value){
+            _pop(context);
+          });
     } catch (e) {
+           _pop(context);
+
       showMessage(e.toString());
-      _pop();
     }
   }
 
@@ -129,9 +130,11 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               // logo
               const SizedBox(height: 40),
-              Image.asset(
-                'lib/assets/flutter_logo.png',
-                scale: 140,
+              SizedBox(
+                height: 120,
+                child: Image.asset(
+                  'lib/assets/fusionapps.png',
+                ),
               ),
               const SizedBox(height: 40),
               //massage

@@ -89,7 +89,7 @@ class _RegisterPageState extends State<RegisterPage> {
               // logo
               const SizedBox(height: 40),
               Image.asset(
-                'lib/assets/flutter_logo.png',
+                'lib/assets/fusionapps.png',
                 scale: 140,
               ),
               const SizedBox(height: 40),
@@ -116,7 +116,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 MyTextField(
                 controller: ConfirmPassword,
                 hinttext: 'confirm password',
-                obsecuretext: false,
+                obsecuretext: true,
               ),
               const SizedBox(height: 40),
               // signUp button
