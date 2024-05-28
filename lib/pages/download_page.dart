@@ -6,8 +6,8 @@ import 'package:animated_login/components/appdetailsmodel.dart';
 import 'package:animated_login/components/myurl.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:lottie/lottie.dart';
 import 'package:http/http.dart' as http;
+import 'package:installed_apps/installed_apps.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
@@ -16,7 +16,7 @@ import 'package:flutter_app_installer/flutter_app_installer.dart';
 
 class DownloadPage extends StatefulWidget {
   final String appId;
-  const DownloadPage({super.key,required this.appId});
+  const DownloadPage({super.key, required this.appId});
 
   @override
   State<DownloadPage> createState() => _DownloadPageState();
@@ -28,7 +28,17 @@ class _DownloadPageState extends State<DownloadPage> {
   String status = "Not Downloaded";
   double? progress;
 
-
+  Future<bool> _isAppInstalled(String package_name) async {
+    bool appIsInstalled =
+        await InstalledApps.isAppInstalled(package_name) ?? false;
+    return appIsInstalled;
+  }
+  
+      Future<bool> _unInstallApp(String package_name) async {
+   bool uninstallIsSuccessful = await InstalledApps.uninstallApp(package_name)?? false;
+    print(uninstallIsSuccessful);
+    return uninstallIsSuccessful;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,10 +47,14 @@ class _DownloadPageState extends State<DownloadPage> {
         child: FutureBuilder(
           builder: (context, snapShort) {
             if (snapShort.hasData) {
+              print(snapShort.data![0].package_name);
               return Column(
                 children: [
-                  Text(widget.appId,style: const TextStyle(fontSize: 20),),
-                 const SizedBox(height: 10),
+                  Text(
+                    widget.appId,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -51,7 +65,8 @@ class _DownloadPageState extends State<DownloadPage> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
                           image: DecorationImage(
-                            image: NetworkImage( Myurl.mainurl+'${Myurl.app_icons}${snapShort.data![0].iconUrl}'),
+                            image: NetworkImage(Myurl.mainurl +
+                                '${Myurl.app_icons}${snapShort.data![0].iconUrl}'),
                           ),
                         ),
                       ),
@@ -119,78 +134,106 @@ class _DownloadPageState extends State<DownloadPage> {
                   GestureDetector(
                     onTap: () {
                       _downloadButtonPressed(snapShort.data![0].appLink);
-                      
                     },
                     child: Row(
                       children: [
-                        Expanded(
-                          child: Center(
-                            child: Row(
-                              children: [
-                                const SizedBox(width: 20),
-                                progress == null ?
-                                Expanded(child: a.shimmer())
-                                :  Expanded(
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children:[
-                                      LinearProgressIndicator(
-                                        backgroundColor: Colors.white,
-                                        borderRadius: BorderRadius.circular(30),
-                                        minHeight: 50,
-                                      
-                                        semanticsLabel: 'he',
-                                        semanticsValue: 'hello',
-                                        color: Colors.blue,
-                                        value: progress,
-                                      ),
-                                      Text(status,style: TextStyle(fontSize: 15,
-                                      
-                                      color:  progress! >0.55? Colors.white:Colors.black),),
-
-
-                                    ] 
+                        FutureBuilder(
+                            future: _isAppInstalled(
+                                snapShort.data![0].package_name),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Expanded(
+                                  child: Center(
+                                    child: Row(
+                                      children: [
+                                        const SizedBox(width: 20),
+                                        progress == null
+                                            ? snapshot.data == true
+                                                ? Expanded(
+                                                  child: InkWell
+                                                  
+                                                  (
+                                                    onTap:
+                                                    
+                                                    (){
+                                                  _unInstallApp(snapShort.data![0].package_name);
+                                                    } ,
+                                                    child: b.shimmer()),
+                                                )
+                                                : Expanded(child: a.shimmer())
+                                            : Expanded(
+                                                child: Stack(
+                                                    alignment: Alignment.center,
+                                                    children: [
+                                                      LinearProgressIndicator(
+                                                        backgroundColor:
+                                                            Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(30),
+                                                        minHeight: 50,
+                                                        color: Colors.blue,
+                                                        value: progress,
+                                                      ),
+                                                      Text(status,
+                                                          style: TextStyle(
+                                                              fontSize: 15,
+                                                              color: progress! >
+                                                                      0.55
+                                                                  ? Colors.white
+                                                                  : Colors
+                                                                      .black))
+                                                    ]),
+                                              ),
+                                        const SizedBox(width: 20),
+                                      ],
+                                    ),
                                   ),
-                                ),
-
-                                const SizedBox(width: 20),
-                              ],
-                            ),
-                          ),
-                        ),
+                                );
+                              } else {
+                                return CircularProgressIndicator();
+                              }
+                            })
                       ],
                     ),
                   ),
                   const SizedBox(height: 10),
-                  snapShort.data![0].screenshots.isEmpty? 
-                  SizedBox(
-                    height: 200,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: snapShort.data![0].screenshots.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                margin: const EdgeInsets.symmetric(horizontal: 10),
-
-                                height: 100,
-                                width: 90,
-                                decoration: BoxDecoration(
-
-                                    image: DecorationImage(
-                                        image: NetworkImage(snapShort
-                                            .data![0].screenshots[index]),fit: BoxFit.cover)),
-                              );
-                            },
+                  snapShort.data![0].screenshots.isEmpty
+                      ? SizedBox(
+                          height: 200,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount:
+                                      snapShort.data![0].screenshots.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      height: 100,
+                                      width: 90,
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: NetworkImage(snapShort
+                                                  .data![0].screenshots[index]),
+                                              fit: BoxFit.cover)),
+                                    );
+                                  },
+                                ),
+                              )
+                            ],
                           ),
                         )
-                      ],
-                    ),
-                  ): const SizedBox(height: 200,
-                  child: Center(child: Text('No Screenshots Found',style: TextStyle(fontSize: 20),)),
-                  ),
+                      : const SizedBox(
+                          height: 200,
+                          child: Center(
+                              child: Text(
+                            'No Screenshots Found',
+                            style: TextStyle(fontSize: 20),
+                          )),
+                        ),
                   const SizedBox(height: 10),
                   Row(
                     children: [
@@ -253,10 +296,11 @@ class _DownloadPageState extends State<DownloadPage> {
   }
 
   Future<List<Appdetails>> appdetails(String appId) async {
-    Map data = {"app_id": appId,};
-     var responce = await http.post(
-          Uri.parse("${Myurl.fullurl}appdetails.php"),
-          body: data);
+    Map data = {
+      "app_id": appId,
+    };
+    var responce = await http.post(Uri.parse("${Myurl.fullurl}appdetails.php"),
+        body: data);
 
     if (responce.statusCode == 200) {
       var data = jsonDecode(responce.body);
@@ -275,6 +319,10 @@ class _DownloadPageState extends State<DownloadPage> {
       .animate(onPlay: (controller) => controller.repeat())
       .effect(duration: 3000.ms) // this "pads out" the total duration
       .effect(delay: 750.ms, duration: 1500.ms); // set defaults
+        Animate get b => Ubox
+      .animate(onPlay: (controller) => controller.repeat())
+      .effect(duration: 3000.ms) // this "pads out" the total duration
+      .effect(delay: 750.ms, duration: 1500.ms); // set defaults
 
   // simple square box with a gradient to use as the target for animations.
   Widget get box => Container(
@@ -282,7 +330,7 @@ class _DownloadPageState extends State<DownloadPage> {
             color: Colors.blue,
             borderRadius: BorderRadius.all(Radius.circular(30))),
         height: 50,
-        child:  const Center(
+        child: const Center(
           child: Text(
             'install',
             style: TextStyle(
@@ -291,71 +339,86 @@ class _DownloadPageState extends State<DownloadPage> {
           ),
         ),
       );
+        Widget get Ubox => Container(
+        decoration: const BoxDecoration(
+            color: Colors.blue,
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        height: 50,
+        child: const Center(
+          child: Text(
+            'Uninstall',
+            style: TextStyle(
+              fontSize: 15,
+            ),
+          ),
+        ),
+      );
 
-void _downloadButtonPressed(String url) async {
-  try {
-    setState(() {
-      progress = null;
-    });
+  void _downloadButtonPressed(String url) async {
+    try {
+      setState(() {
+        progress = null;
+      });
 
-    final request = Request('GET', Uri.parse(url));
-    final StreamedResponse response = await Client().send(request);
-    final contentLength = response.contentLength;
+      final request = Request('GET', Uri.parse(url));
+      final StreamedResponse response = await Client().send(request);
+      final contentLength = response.contentLength;
 
-    setState(() {
-      progress = 0.000001;
-      status = "Download Started";
-    });
+      setState(() {
+        progress = 0.000001;
+        status = "Download Started";
+      });
 
-    List<int> bytes = [];
-    final file = await _getFile('app.apk');
+      List<int> bytes = [];
+      final file = await _getFile('app.apk');
 
-    response.stream.listen(
-      (List<int> newBytes) {
-        bytes.addAll(newBytes);
-        final downloadedLength = bytes.length;
-        setState(() {
-          progress = downloadedLength.toDouble() / (contentLength ?? 1);
-          status = "${((progress ?? 0) * 100).toStringAsFixed(0)} %";
-        });
-      },
-      onDone: () async {
-        try {
-          await file.writeAsBytes(bytes);
+      response.stream.listen(
+        (List<int> newBytes) {
+          bytes.addAll(newBytes);
+          final downloadedLength = bytes.length;
           setState(() {
-            progress = 1;
-            status = "Download Finished";
+            progress = downloadedLength.toDouble() / (contentLength ?? 1);
+            status = "${((progress ?? 0) * 100).toStringAsFixed(0)} %";
           });
+        },
+        onDone: () async {
+          try {
+            await file.writeAsBytes(bytes);
+            setState(() {
+              progress = 1;
+              status = "Download Finished";
+            });
 
-          if (await file.exists()) {
-            print('File downloaded to: $file');
+            if (await file.exists()) {
+              print('File downloaded to: $file');
 
-            initPlatformState();
-            initVersion();
-            initIsSystemApplication();
-            await initTestApkFile(file.path).whenComplete(() => startInstallTestApkNormal());
-          } else {
-            print('Error: File does not exist after download.');
+              initPlatformState();
+              initVersion();
+              initIsSystemApplication();
+              await initTestApkFile(file.path)
+                  .whenComplete(() => startInstallTestApkNormal());
+            } else {
+              print('Error: File does not exist after download.');
+            }
+          } catch (e) {
+            print('Error during file handling or initialization: $e');
           }
-        } catch (e) {
-          print('Error during file handling or initialization: $e');
-        }
-      },
-      onError: (e) {
-        debugPrint('Download error: $e');
-        setState(() {
-          status = "Download Failed";
-        });
-      },
-      cancelOnError: true,
-    );
-  } catch (e) {
-    debugPrint('Error initiating download: $e');
-    setState(() {
-      status = "Download Failed";
-    });
+        },
+        onError: (e) {
+          debugPrint('Download error: $e');
+          setState(() {
+            status = "Download Failed";
+          });
+        },
+        cancelOnError: true,
+      );
+    } catch (e) {
+      debugPrint('Error initiating download: $e');
+      setState(() {
+        status = "Download Failed";
+      });
+    }
   }
-}
 
   /// Finds an appropriate place on the user’s device to put the file.
   /// In this case we are choosing to use the temp directory.
@@ -420,7 +483,6 @@ void _downloadButtonPressed(String url) async {
         bytes.lengthInBytes,
       ),
     );
-  
   }
 
   void startInstallTestApkNormal() {
@@ -428,7 +490,4 @@ void _downloadButtonPressed(String url) async {
       filePath: _testInstallApk.path,
     );
   }
-
-
-  
 }

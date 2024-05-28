@@ -29,6 +29,8 @@ class Appdetails {
     String featured;
     String tags;
     String appLink;
+    String package_name;
+
 
     Appdetails({
         required this.appId,
@@ -51,6 +53,7 @@ class Appdetails {
         required this.featured,
         required this.tags,
         required this.appLink,
+        required this.package_name
     });
 
     factory Appdetails.fromJson(Map<String, dynamic> json) => Appdetails(
@@ -74,6 +77,8 @@ class Appdetails {
         featured: json["featured"],
         tags: json["tags"],
         appLink: json["appLink"],
+        package_name: json["package_name"],
+
     );
 
   set downloading(bool downloading) {}
@@ -99,5 +104,7 @@ class Appdetails {
         "featured": featured,
         "tags": tags,
         "appLink": appLink,
+        "package_name": package_name,
+
     };
 }
