@@ -95,26 +95,3 @@ Widget _buildError() {
   ); // Display an error message when fetching apps fails.
 }
 }
-
-
-// LogOut code dont delete
-
-  // SafeArea(
-  //       child: Center(
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             Text('logedin as ${user.email}'),
-  //             IconButton(
-  //                 onPressed: signUserOut, icon: const Icon(Icons.logout_rounded)),
-      
-  //                 IconButton(onPressed: (){
-  //                   Navigator.push(
-  //             context,
-  //             MaterialPageRoute(builder: (context) => const AppListScreen()),
-  //           );
-  //                 }, icon: const Icon(Icons.arrow_back_rounded))
-  //           ],
-  //         ),
-  //       ),
-  //     ),

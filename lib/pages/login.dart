@@ -2,6 +2,7 @@ import 'package:animated_login/components/auth_services.dart';
 import 'package:animated_login/components/mybutton.dart';
 import 'package:animated_login/components/mytextfield.dart';
 import 'package:animated_login/components/square_tile.dart';
+import 'package:animated_login/pages/forgotpasswordpage.dart';
 import 'package:animated_login/pages/register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -36,9 +37,9 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _pop(context) {
-    Navigator.pop(context);
-  }
+  // void _pop(context) {
+  //   Navigator.pop(context);
+  // }
 
   void newRegister() {
     Navigator.push(
@@ -50,27 +51,34 @@ class _LoginPageState extends State<LoginPage> {
         ));
   }
 
-  void signUserIn() async {
-    // show loading
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
-    try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: emailcontroller.text, password: passwordcontroller.text)
-          .then((value){
-           _pop(context);
-          });
-    } on FirebaseAuthException catch (e) {
-      _pop(context);
-      // wrong email message
-      showMessage(e.code);
-    }
+void signUserIn() async {
+  // show loading
+  showDialog(
+    context: context,
+    builder: (context) {
+      return const Center(child: CircularProgressIndicator());
+    },
+  );
+  try {
+    await FirebaseAuth.instance
+        .signInWithEmailAndPassword(
+            email: emailcontroller.text, password: passwordcontroller.text)
+        .then((value){
+         _pop(context); // Dismiss the dialog here
+        });
+  } on FirebaseAuthException catch (e) {
+    _pop(context); // Dismiss the dialog here as well
+    // wrong email message
+    showMessage(e.code);
   }
+}
+
+void _pop(BuildContext context) {
+  if(Navigator.canPop(context)) {
+    Navigator.pop(context);
+  }
+}
+
 
   googleSignIn() {
     showDialog(
@@ -164,7 +172,13 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+  context,
+  MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
+);
+
+                        },
                         child: Text(
                           'Forgot password',
                           style: TextStyle(color: Colors.grey[600]),

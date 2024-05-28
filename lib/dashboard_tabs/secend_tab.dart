@@ -137,7 +137,6 @@ for (Map<String, dynamic> index in data) {
            Topappmodel.fromJson(index),
         );
       }
-      print(responseData);
       return responseData;
     }
     return [];

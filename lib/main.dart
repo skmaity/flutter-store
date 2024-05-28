@@ -28,11 +28,18 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        
+        brightness: Brightness.light,
         fontFamily: 'JosefinSans',
         useMaterial3: true,
 
       ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        fontFamily: 'JosefinSans',
+        useMaterial3: true,
+
+      ),
+      
       themeMode: ThemeMode.system,
       home: const AuthPage(),
     );

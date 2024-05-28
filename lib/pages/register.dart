@@ -1,7 +1,8 @@
+import 'package:animated_login/components/auth_services.dart';
 import 'package:animated_login/components/mybutton.dart';
 import 'package:animated_login/components/mytextfield.dart';
 import 'package:animated_login/components/square_tile.dart';
-import 'package:animated_login/pages/otp_page.dart';
+// import 'package:animated_login/pages/otp_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -30,10 +31,35 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
 
-   void _pop(){
+   void _pop(BuildContext context){
       Navigator.pop(context);
 
 }
+ googleSignIn() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+    try {
+      _pop(context);
+      Authservices().signInWithGoogle();
+    } catch (e) {
+     _pop(context);
+
+      showMessage(e.toString());
+    }
+
+    // try {
+    //   GoogleAuthProvider googleAuthProvider = GoogleAuthProvider();
+    //   auth.signInWithProvider(googleAuthProvider);
+    //   _pop();
+    // } on FirebaseAuthException catch (e) {
+    //   _pop();
+    // showMessage(e.code);
+    // }
+  }
 
     void newRegister() {
       Navigator.push(
@@ -66,19 +92,19 @@ class _RegisterPageState extends State<RegisterPage> {
         }
       
     
-      _pop();
+      _pop(context);
 
       } on FirebaseAuthException catch (e) {
-        _pop();
+        _pop(context);
         // wrong email message
        showMessage(e.code);
       }
     }
   @override
   Widget build(BuildContext context) {
-    void getOtp() {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const OtpPage(),));
-  }
+  //   void getOtp() {
+  //     Navigator.push(context, MaterialPageRoute(builder: (context) => const OtpPage(),));
+  // }
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
@@ -170,17 +196,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 children: [
                   SquareTile(
                     onTap: () {
-                      
+                     googleSignIn();
                     },
                     imagePath: 'lib/assets/google_logo.png'),
                   SizedBox(
                     width: 10,
                   ),
-                  SquareTile(
-                    onTap: () {
-                      
-                    },
-                    imagePath: 'lib/assets/facebook_logo.png'),
                 ],
               ),
               const SizedBox(

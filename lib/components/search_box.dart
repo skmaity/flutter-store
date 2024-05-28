@@ -12,7 +12,7 @@ class SearchBox extends StatelessWidget {
                 child: Container(
                 
                 height: 60,
-                width: 230,
+                // width: 230,
                 decoration: BoxDecoration(
                boxShadow: [
       // BoxShadow(

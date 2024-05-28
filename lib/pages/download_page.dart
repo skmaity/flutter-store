@@ -60,13 +60,9 @@ class _DownloadPageState extends State<DownloadPage> {
         child: FutureBuilder(
           builder: (context, snapShort) {
             if (snapShort.hasData) {
-              print(snapShort.data![0].package_name);
+             
               return Column(
                 children: [
-                  Text(
-                    widget.appId,
-                    style: const TextStyle(fontSize: 20),
-                  ),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -85,6 +81,7 @@ class _DownloadPageState extends State<DownloadPage> {
                       ),
                       const SizedBox(width: 20),
                       Expanded(
+                        
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -99,6 +96,7 @@ class _DownloadPageState extends State<DownloadPage> {
                           ],
                         ),
                       ),
+                      SizedBox(width: 20,)
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -304,12 +302,15 @@ class _DownloadPageState extends State<DownloadPage> {
                       ),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const SizedBox(width: 32),
-                      Expanded(child: Text(snapShort.data![0].description)),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(width: 32),
+                        Expanded(child: Text(snapShort.data![0].description)),
+                      ],
+                    ),
                   ),
                   InkWell(
                     onTap: (){
@@ -481,6 +482,7 @@ showMessage('Ratings and reviews are not available yet, but stay tuned for futur
       );
     } catch (e) {
       debugPrint('Error initiating download: $e');
+      showMessage("Hello! 🌟 Our app is currently in a testing phase and isn't available for download at the moment. We appreciate your patience and can't wait to share it with you soon! Thank you for your understanding! 😊");
       setState(() {
         status = "Download Failed";
       });
