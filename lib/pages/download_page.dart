@@ -150,15 +150,32 @@ class _DownloadPageState extends State<DownloadPage> {
                                         progress == null
                                             ? snapshot.data == true
                                                 ? Expanded(
-                                                  child: InkWell
-                                                  
-                                                  (
-                                                    onTap:
-                                                    
-                                                    (){
-                                                  _unInstallApp(snapShort.data![0].package_name);
-                                                    } ,
-                                                    child: b.shimmer()),
+                                                  child: Row(
+                                                    children: [
+                                                      Expanded(
+                                                        child: InkWell
+                                                        
+                                                        (
+                                                          onTap:
+                                                          
+                                                          (){
+                                                        _unInstallApp(snapShort.data![0].package_name);
+                                                          } ,
+                                                          child: b.shimmer()),
+                                                      ),
+                                                      Expanded(
+                                                        child: InkWell
+                                                        
+                                                        (
+                                                          onTap:
+                                                          
+                                                          (){
+                                                        _unInstallApp(snapShort.data![0].package_name);
+                                                          } ,
+                                                          child: b.shimmer()),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 )
                                                 : Expanded(child: a.shimmer())
                                             : Expanded(
