@@ -32,6 +32,13 @@ class AppInfoScreen extends StatelessWidget {
     );
   }
 
+  Future<bool> _unInstallApp(String package_name) async {
+    bool uninstallIsSuccessful =
+        await InstalledApps.uninstallApp(package_name) ?? false;
+    print(uninstallIsSuccessful);
+    return uninstallIsSuccessful;
+  }
+
   Widget _buildProgressIndicator() {
     return const Center(child: Text("Getting app info ...."));
   }
@@ -63,32 +70,54 @@ class AppInfoScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        ListTile(
-          title: const Text("Package Name"),
-          subtitle: Text(app.packageName),
-        ),
+        // ListTile(
+        //   title: const Text("Package Name"),
+        //   subtitle: Text(app.packageName),
+        // ),
         ListTile(
           title: const Text("Version Name"),
           subtitle: Text(app.versionName),
         ),
-        ListTile(
-          title: const Text("Version Code"),
-          subtitle: Text(app.versionCode.toString()),
-        ),
+        // ListTile(
+        //   title: const Text("Version Code"),
+        //   subtitle: Text(app.versionCode.toString()),
+        // ),
         ListTile(
           title: const Text("Built With"),
           subtitle: Text(app.builtWith.toString().split(".").last),
         ),
-        ListTile(
-          title: const Text("Installed On"),
-          subtitle: Text(app.installedTimestamp.toString()),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16),
-          child: ElevatedButton(
-            onPressed: () => InstalledApps.startApp(app.packageName),
-            child: const Text("Open App"),
-          ),
+        // ListTile(
+        //   title: const Text("Installed On"),
+        //   subtitle: Text(app.installedTimestamp.toString()),
+        // ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                  color: Colors.blue[200],
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(width: 0.5)),
+              child: TextButton(
+                  onPressed: () => InstalledApps.startApp(app.packageName),
+                  child: Text("Open App")),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                  color: Colors.blue[200],
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(width: 0.5)),
+              child: TextButton(
+                  onPressed: () => _unInstallApp(app.packageName),
+                  child: Text(
+                    "Uninstall App",
+                  )),
+            ),
+          ],
         ),
       ],
     );

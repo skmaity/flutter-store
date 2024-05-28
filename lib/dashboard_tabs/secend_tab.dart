@@ -107,28 +107,8 @@ minVerticalPadding: 20,
                               ),
                             ),
                             title: Text(snapShort.data![index].appName),
-                            trailing: SizedBox(
-                              height: 60,
-                              width: 50,
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    height: 50,
-                                    width: 50,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        downloadFile(
-                                            snapShort.data![index].appLink);
-                                      },
-                                      icon: const Center(
-                                            child: Icon(Icons
-                                                .file_download_outlined),
-                                          ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )),
+                           
+                            ),
                       );
                     },
                   ),

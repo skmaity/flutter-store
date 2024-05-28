@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:animated_login/components/myloading.dart';
 import 'package:animated_login/pages/about_page.dart';
+import 'package:animated_login/pages/datasafty.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:animated_login/components/appdetailsmodel.dart';
 import 'package:animated_login/components/myurl.dart';
@@ -33,12 +34,24 @@ class _DownloadPageState extends State<DownloadPage> {
         await InstalledApps.isAppInstalled(package_name) ?? false;
     return appIsInstalled;
   }
-  
-      Future<bool> _unInstallApp(String package_name) async {
-   bool uninstallIsSuccessful = await InstalledApps.uninstallApp(package_name)?? false;
+
+  Future<bool> _unInstallApp(String package_name) async {
+    bool uninstallIsSuccessful =
+        await InstalledApps.uninstallApp(package_name) ?? false;
     print(uninstallIsSuccessful);
     return uninstallIsSuccessful;
   }
+  showMessage(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(message),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -150,33 +163,48 @@ class _DownloadPageState extends State<DownloadPage> {
                                         progress == null
                                             ? snapshot.data == true
                                                 ? Expanded(
-                                                  child: Row(
-                                                    children: [
-                                                      Expanded(
-                                                        child: InkWell
-                                                        
-                                                        (
-                                                          onTap:
-                                                          
-                                                          (){
-                                                        _unInstallApp(snapShort.data![0].package_name);
-                                                          } ,
-                                                          child: b.shimmer()),
-                                                      ),
-                                                      Expanded(
-                                                        child: InkWell
-                                                        
-                                                        (
-                                                          onTap:
-                                                          
-                                                          (){
-                                                        _unInstallApp(snapShort.data![0].package_name);
-                                                          } ,
-                                                          child: b.shimmer()),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )
+                                                    child: Row(
+                                                      children: [
+                                                        Expanded(
+                                                          child: InkWell(
+                                                              onTap: () {
+                                                                InstalledApps.startApp(
+                                                                    snapShort
+                                                                        .data![
+                                                                            0]
+                                                                        .package_name);
+                                                              },
+                                                              child:Container(
+        decoration: const BoxDecoration(
+       border: Border.fromBorderSide(BorderSide()),
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        height: 50,
+        child: const Center(
+          child: Text(
+            'Open',
+            style: TextStyle(
+              fontSize: 15,
+            ),
+          ),
+        ),
+      ),
+                                                                ),
+                                                        ),
+                                                        Expanded(
+                                                          child: InkWell(
+                                                              onTap: () {
+                                                                _unInstallApp(
+                                                                    snapShort
+                                                                        .data![
+                                                                            0]
+                                                                        .package_name);
+                                                              },
+                                                              child:
+                                                                  b.shimmer()),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
                                                 : Expanded(child: a.shimmer())
                                             : Expanded(
                                                 child: Stack(
@@ -252,22 +280,29 @@ class _DownloadPageState extends State<DownloadPage> {
                           )),
                         ),
                   const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      const SizedBox(width: 20),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
+                  InkWell(
+                    onTap: (){
+                       Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) =>
                                 AbouPage(appData: snapShort.data),
                           ));
-                        },
-                        child: const Text('About this app'),
+                    },
+                    child: SizedBox(
+                      height: 40,
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 20),
+                      
+                             
+                            
+                           const Text('About this app',style: TextStyle(color: Colors.blue),),
+                          
+                          const Expanded(child: SizedBox()),
+                          const Icon(Icons.arrow_forward_rounded),
+                          const SizedBox(width: 20),
+                        ],
                       ),
-                      const Expanded(child: SizedBox()),
-                      const Icon(Icons.arrow_forward_rounded),
-                      const SizedBox(width: 20),
-                    ],
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -276,29 +311,44 @@ class _DownloadPageState extends State<DownloadPage> {
                       Expanded(child: Text(snapShort.data![0].description)),
                     ],
                   ),
-                  Row(
-                    children: [
-                      const SizedBox(width: 20),
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text('Data safety'),
+                  InkWell(
+                    onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                DataSafty(),
+                          ));
+                    },
+                    child: SizedBox(
+                      height: 50,
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 20),
+                          const Text('Data safety',style: TextStyle(color: Colors.blue),),
+                          
+                          const Expanded(child: SizedBox()),
+                          const Icon(Icons.arrow_forward_rounded),
+                          const SizedBox(width: 20),
+                        ],
                       ),
-                      const Expanded(child: SizedBox()),
-                      const Icon(Icons.arrow_forward_rounded),
-                      const SizedBox(width: 20),
-                    ],
+                    ),
                   ),
-                  Row(
-                    children: [
-                      const SizedBox(width: 20),
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text('Ratings and reviews'),
+                  InkWell(
+                    onTap: (){
+showMessage('Ratings and reviews are not available yet, but stay tuned for future updates!');
+                    },
+                    child: SizedBox(
+                      height: 50,
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 20),
+                          Text('Ratings and reviews',style: TextStyle(color: Colors.blue),),
+                          
+                          const Expanded(child: SizedBox()),
+                          const Icon(Icons.arrow_forward_rounded),
+                          const SizedBox(width: 20),
+                        ],
                       ),
-                      const Expanded(child: SizedBox()),
-                      const Icon(Icons.arrow_forward_rounded),
-                      const SizedBox(width: 20),
-                    ],
+                    ),
                   ),
                 ],
               );
@@ -311,6 +361,7 @@ class _DownloadPageState extends State<DownloadPage> {
       ),
     );
   }
+  
 
   Future<List<Appdetails>> appdetails(String appId) async {
     Map data = {
@@ -336,8 +387,7 @@ class _DownloadPageState extends State<DownloadPage> {
       .animate(onPlay: (controller) => controller.repeat())
       .effect(duration: 3000.ms) // this "pads out" the total duration
       .effect(delay: 750.ms, duration: 1500.ms); // set defaults
-        Animate get b => Ubox
-      .animate(onPlay: (controller) => controller.repeat())
+  Animate get b => Ubox.animate(onPlay: (controller) => controller.repeat())
       .effect(duration: 3000.ms) // this "pads out" the total duration
       .effect(delay: 750.ms, duration: 1500.ms); // set defaults
 
@@ -356,7 +406,7 @@ class _DownloadPageState extends State<DownloadPage> {
           ),
         ),
       );
-        Widget get Ubox => Container(
+  Widget get Ubox => Container(
         decoration: const BoxDecoration(
             color: Colors.blue,
             borderRadius: BorderRadius.all(Radius.circular(30))),

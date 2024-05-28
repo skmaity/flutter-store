@@ -98,26 +98,26 @@ class _LoginPageState extends State<LoginPage> {
     // }
   }
 
-  facebookSignIn() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
-    try {
-      final UserCredential usercredential =
-          await Authservices().signInWithFacebook();
+  // facebookSignIn() async {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return const Center(child: CircularProgressIndicator());
+  //     },
+  //   );
+  //   try {
+  //     final UserCredential usercredential =
+  //         await Authservices().signInWithFacebook();
 
-      Authservices().signInWithFacebook().then((value){
-            _pop(context);
-          });
-    } catch (e) {
-           _pop(context);
+  //     Authservices().signInWithFacebook().then((value){
+  //           _pop(context);
+  //         });
+  //   } catch (e) {
+  //          _pop(context);
 
-      showMessage(e.toString());
-    }
-  }
+  //     showMessage(e.toString());
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -229,9 +229,9 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(
                     width: 10,
                   ),
-                  SquareTile(
-                      onTap: facebookSignIn,
-                      imagePath: 'lib/assets/facebook_logo.png'),
+                  // SquareTile(
+                  //     onTap: facebookSignIn,
+                  //     imagePath: 'lib/assets/facebook_logo.png'),
                 ],
               ),
               const SizedBox(

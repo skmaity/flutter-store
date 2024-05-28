@@ -46,30 +46,31 @@ class _DashBoardState extends State<DashBoard> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+
         // backgroundColor: Colors.cyan,
         appBar: AppBar(
+          title: Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Image.asset('lib/assets/fusionapps.png'),
+          ),
           backgroundColor: Colors.transparent,
           elevation: 0,
+
           actions: [
-            Center(
-              child: Row(
-                children: [
-                  SearchBox(onTap: onSearch, text: 'Search Apps & Games'),
-                   IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.notifications_outlined)),
-              SizedBox(
-                width: 40,
-                child: ClipRRect(
-                    clipBehavior: Clip.antiAlias,
-                    borderRadius: BorderRadius.circular(30),
-                    child: user.photoURL != null? Image(image: NetworkImage(user.photoURL!)): const Image(image: AssetImage('lib/assets/nodp.jpg')) ),
-              ), 
-              const SizedBox(width: 20,)
-                ],
-              ),
-              
-            )
+
+            SearchBox(onTap: onSearch, text: 'Search Apps & Games'),
+            SizedBox(width: 10,),
+            //  IconButton(
+            // onPressed: () {},
+            // icon: const Icon(Icons.notifications_outlined)),
+                        SizedBox(
+                          width: 40,
+                          child: ClipRRect(
+              clipBehavior: Clip.antiAlias,
+              borderRadius: BorderRadius.circular(30),
+              child: user.photoURL != null? Image(image: NetworkImage(user.photoURL!)): const Image(image: AssetImage('lib/assets/nodp.jpg')) ),
+                        ), 
+                        const SizedBox(width: 15,)
           ],
         ),
         body:Column(

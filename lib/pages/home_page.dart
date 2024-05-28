@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:animated_login/components/applist_model.dart';
 import 'package:animated_login/components/myurl.dart';
 import 'package:animated_login/components/search_model.dart';
 import 'package:animated_login/pages/download_page.dart';
