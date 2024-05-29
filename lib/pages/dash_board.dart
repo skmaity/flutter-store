@@ -15,6 +15,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:get/get_state_manager/get_state_manager.dart';
 
 class DashBoard extends StatefulWidget {
@@ -33,6 +34,20 @@ List<Widget> pages = [
 var controller = Get.put(Navigation());
 
 class _DashBoardState extends State<DashBoard> {
+_login()async{
+final SharedPreferences prefs = await SharedPreferences.getInstance();
+await prefs.setBool('login', true);
+}
+_logoutspf()async{
+final SharedPreferences prefs = await SharedPreferences.getInstance();
+await prefs.setBool('login', false);
+}
+  @override
+  void initState() {
+ _login();
+
+    super.initState();
+  }
   final FirebaseAuth _auth = FirebaseAuth.instance;
   _handleIndexChange(int index) {
     setState(() {
@@ -47,34 +62,21 @@ class _DashBoardState extends State<DashBoard> {
   Future<void> _logout(BuildContext context) async {
     try {
       await _auth.signOut();
+      _logoutspf();
+
       // Navigate to login screen or any other screen after logout
       // Navigator.pushReplacementNamed(context, '/login'); // Example navigation
     } catch (e) {
-      print('Error logging out: $e');
+      showMessage(e.toString());
       // Handle error if needed
     }
   }
-  Future<void> _confirmLogout(BuildContext context) {
-    return showDialog(
+    showMessage(String message) {
+    showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (context) {
         return AlertDialog(
-          title: Text('Logout'),
-          content: Text('Are you sure you want to logout?'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Logout'),
-              onPressed: () {
-                _logout(context);
-              },
-            ),
-          ],
+          title: Text(message),
         );
       },
     );
@@ -124,6 +126,7 @@ void _showSlider(BuildContext context) {
       child: Scaffold(
         // backgroundColor: Colors.cyan,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
          
           backgroundColor: Colors.transparent,
           elevation: 0,

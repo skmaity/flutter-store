@@ -53,6 +53,7 @@ dependencies:
   flutter_native_splash: ^2.3.10
   connectivity_plus: ^6.0.3
   url_launcher: ^6.2.6
+  shared_preferences: ^2.2.3
   
 
 dev_dependencies:
