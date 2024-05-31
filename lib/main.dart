@@ -32,11 +32,14 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.light,
         fontFamily: 'JosefinSans',
         useMaterial3: true,
+        colorSchemeSeed: Colors.blue,
+
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         fontFamily: 'JosefinSans',
         useMaterial3: true,
+        colorSchemeSeed: Colors.blue,
       ),
       themeMode: ThemeMode.system,
       home: const CheckState(),

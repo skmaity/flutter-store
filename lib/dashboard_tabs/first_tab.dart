@@ -25,6 +25,8 @@ class _FirstTabState extends State<FirstTab> {
   List<Applistmodel> recommendedappslist = [];
   List<Applistmodel> allappslist = [];
 
+  List<String> titles = ['Others', 'You May Like', 'Trending', 'New'];
+
   var controller = Get.put(Navigation());
   int _listSize = 5;
 
@@ -61,8 +63,7 @@ class _FirstTabState extends State<FirstTab> {
                                     print(pageViewIndex);
                                   },
                                   child: Container(
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 5),
+                                    margin: EdgeInsets.symmetric(horizontal: 5),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
                                       image: DecorationImage(
@@ -95,13 +96,11 @@ class _FirstTabState extends State<FirstTab> {
                                 snapShot: snapshot,
                                 header: 'Suggested For You',
                                 onTapArow: () {
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                               Applistpage(
-title:'Suggested For You' ,
-snapShot: snapshot,
-                                              )));
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => Applistpage(
+                                            title: 'Suggested For You',
+                                            snapShot: snapshot,
+                                          )));
                                 },
                               ),
                               AppList(
@@ -110,15 +109,11 @@ snapShot: snapshot,
                                 snapShot: snapshot,
                                 header: 'Recommended For You',
                                 onTapArow: () {
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              Applistpage(
-title:'Recommended For You' ,
-
-snapShot: snapshot,
-
-                                              )));
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => Applistpage(
+                                            title: 'Recommended For You',
+                                            snapShot: snapshot,
+                                          )));
                                 },
                               ),
                             ],
@@ -148,15 +143,16 @@ snapShot: snapshot,
                             appLists.add(AppList(
                               listSize: end - start,
                               nextVal: 0,
-                              snapShot: AsyncSnapshot.withData(ConnectionState.done, snapshot.data!.sublist(start, end)),
-                              header: '',
+                              snapShot: AsyncSnapshot.withData(
+                                  ConnectionState.done,
+                                  snapshot.data!.sublist(start, end)),
+                              header: titles[numLists-1],
                               onTapArow: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>  Applistpage(
-                                      title: "",
-snapShot: snapshot,
-
-                                    )));
+                                    builder: (context) => Applistpage(
+                                          title:titles[numLists-1] ,
+                                          snapShot: snapshot,
+                                        )));
                               },
                             ));
                           }

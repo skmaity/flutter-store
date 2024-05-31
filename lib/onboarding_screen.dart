@@ -57,7 +57,7 @@ class _OnBoardState extends State<OnBoard> {
                     TextButton(
                       onPressed: (){
 
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const AuthPage(),));
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AuthPage(),));
                     }, child: const Text('done'))
                     : 
                     TextButton(

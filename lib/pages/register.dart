@@ -113,12 +113,14 @@ class _RegisterPageState extends State<RegisterPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // logo
-              const SizedBox(height: 40),
-              Image.asset(
-                'lib/assets/fusionapps.png',
-                scale: 140,
+             
+             SizedBox(
+                height: 120,
+                child: Image.asset(
+                  'lib/assets/fusionapps.png',
+                ),
               ),
-              const SizedBox(height: 40),
+              
               //massage
               Text(
                 "Let's create a new account!",
@@ -130,6 +132,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 controller: email,
                 hinttext: 'username',
                 obsecuretext: false,
+                
               ),
               const SizedBox(height: 10),
 

@@ -137,14 +137,14 @@ void _pop(BuildContext context) {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // logo
-              const SizedBox(height: 40),
+              const SizedBox(height: 10),
               SizedBox(
                 height: 120,
                 child: Image.asset(
                   'lib/assets/fusionapps.png',
                 ),
               ),
-              const SizedBox(height: 40),
+              
               //massage
               Text(
                 "Welcome back you've been missed!",
@@ -249,7 +249,7 @@ void _pop(BuildContext context) {
                 ],
               ),
               const SizedBox(
-                height: 40,
+                height: 20,
               ),
 
               Row(
